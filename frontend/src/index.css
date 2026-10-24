@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 336 33% 3%;
+        --foreground: 340 33% 98%;
+        --card: 330 42% 7%;
+        --card-foreground: 340 33% 98%;
+        --popover: 330 42% 7%;
+        --popover-foreground: 340 33% 98%;
+        --primary: 340 100% 58%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 330 30% 12%;
+        --secondary-foreground: 340 33% 98%;
+        --muted: 330 20% 14%;
+        --muted-foreground: 335 12% 55%;
+        --accent: 46 65% 52%;
+        --accent-foreground: 336 33% 3%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 335 20% 16%;
+        --input: 335 20% 16%;
+        --ring: 340 100% 58%;
+        --radius: 0.75rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    html.lenis, html.lenis body {
+        height: auto;
+    }
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+    body {
+        @apply text-foreground;
+        background-color: #0a0508;
+        font-family: 'Outfit', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
+    ::selection {
+        background: #ff2a70;
+        color: #fff;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0a0508;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #3d1523;
+        border-radius: 8px;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border: inherit;
+    }
+}
+
+@layer utilities {
+    .font-serif-display {
+        font-family: 'Playfair Display', Georgia, serif;
+    }
+    .font-mono-accent {
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* Film grain overlay */
+.grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Editorial marquee */
+@keyframes marquee-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-x 32s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+}
+
+/* Tracing beam border for the highlighted pricing card */
+@property --beam-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+@keyframes beam-rotate {
+    to { --beam-angle: 360deg; }
+}
+.beam-card {
+    position: relative;
+}
+.beam-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--beam-angle, 0deg), transparent 0%, #d4af37 12%, #ff2a70 22%, transparent 34%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: beam-rotate 4.5s linear infinite;
+    pointer-events: none;
+}
+
+/* WhatsApp floating pulse */
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.55; }
+    80%, 100% { transform: scale(1.65); opacity: 0; }
+}
+.pulse-ring::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: rgba(37, 211, 102, 0.5);
+    animation: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    z-index: -1;
+}
+
+/* Soft glow helpers */
+.glow-accent {
+    box-shadow: 0 0 24px rgba(255, 42, 112, 0.35);
+}
+.glow-gold {
+    box-shadow: 0 0 24px rgba(212, 175, 55, 0.25);
+}

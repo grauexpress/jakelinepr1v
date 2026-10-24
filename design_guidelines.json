@@ -1,0 +1,133 @@
+{
+  "project_overview": {
+    "app_type": "Marketing Landing Page + Admin Dashboard",
+    "theme": "Dark Theme (Premium, Sexy, Feminine, Elegant, Modern)",
+    "primary_persona": "Jakeline Safadinha (18+ content creator)",
+    "vibe": "Luxury, exclusivity, mystery, desire, confidence. Professional and sophisticated, no spam look.",
+    "target_device": "Mobile First (mainly Instagram traffic)"
+  },
+  "typography": {
+    "strategy": "Editorial Future (Wide Display Sans + Geometric Body) mixed with Luxury (Classic Serif Headings).",
+    "headings": {
+      "font_family": "Playfair Display or Cormorant Garamond (Serif) for emotional/sensual impact.",
+      "styles": "Elegant, tracking-tight, light or medium weights."
+    },
+    "body": {
+      "font_family": "Outfit, Manrope, or Inter (Clean Sans)",
+      "styles": "Highly legible, subtle contrast."
+    },
+    "accents": {
+      "font_family": "JetBrains Mono or similar for badges and micro-copy (adds a modern, premium digital feel).",
+      "styles": "Uppercase, tracking-[0.2em], text-xs."
+    }
+  },
+  "colors": {
+    "background": {
+      "primary": "#0A0508", 
+      "secondary": "#1A0B12"
+    },
+    "accents": {
+      "bordeaux": "#5C162E",
+      "wine": "#721c24",
+      "rosa_queimado": "#B36B78",
+      "gold": "#D4AF37",
+      "neon_rose": "#FF2A70"
+    },
+    "text": {
+      "primary": "#FDF7F8",
+      "secondary": "#B36B78",
+      "muted": "#8A6D76"
+    },
+    "rules": [
+      "No generic gradients; rely on noise, grain, and soft ambient glows.",
+      "Use #0A0508 (Tinted Dark Rose/Black) instead of pure black.",
+      "Use gold sparingly for VIP badges and premium highlights.",
+      "Ensure minimum 4.5:1 contrast ratio for normal text."
+    ]
+  },
+  "layouts": {
+    "strategy": "Mobile-first, high density but with breathing room. The Bento Grid Protocol for Dashboard.",
+    "spacing": "Generous on desktop (p-12 to p-24), tight and focused on mobile (p-4 to p-8).",
+    "sections": {
+      "hero": "Full height (min-h-[80vh]), background image with dark bordeaux overlay (bg-black/60). Center aligned or bottom aligned text for dramatic effect.",
+      "social_proof": "Horizontal scrolling cards on mobile. Professional dashboard-like summary (4.9/5 stars, progress bars).",
+      "chat_carousel": "Swipable carousel showing chat prints. Subtle blur or mask on edges.",
+      "pricing": "3 columns on desktop, stacked on mobile. Middle '7 days' card highlighted with glowing border (The Tracing Beam effect).",
+      "how_it_works": "Vertical timeline or 2x2 grid.",
+      "admin_dashboard": "Sidebar navigation (hidden behind hamburger on mobile), dense bento grids for analytics, glassmorphism for sticky headers."
+    }
+  },
+  "visual_enhancers": {
+    "surfaces": [
+      "Glassmorphism (Crystal): For sticky nav, floating WhatsApp button, and live notifications. bg-black/60 backdrop-blur-xl border border-white/10.",
+      "Neumorphism (Tactile): For pricing cards and testimonial cards. Solid #1A0B12 with subtle 1px border-rosa_queimado/20.",
+      "The Tracing Beam: For the VIP/Most Popular pricing card to signal 'Active/Premium'."
+    ],
+    "textures": [
+      "Subtle film grain overlay to kill digital flatness and enhance the 'boudoir editorial' feel."
+    ],
+    "borders": [
+      "1px solid border-white/5 to border-white/10 for cards and containers."
+    ]
+  },
+  "motion": {
+    "interactions": [
+      "Hover on buttons: slight lift (-translate-y-1), increased shadow and glow (shadow-[0_0_15px_rgba(255,42,112,0.5)]).",
+      "Carousel swipe: smooth momentum (Lenis smooth scroll if possible)."
+    ],
+    "entrances": [
+      "Staggered fade-up for pricing cards.",
+      "Live activity notifications (bottom corner): slide up, hold 3s, fade out."
+    ]
+  },
+  "components_and_libraries": {
+    "ui_library": "shadcn/ui (customized heavily for the luxury dark theme).",
+    "icons": "lucide-react or @phosphor-icons/react (Duotone weight for premium feel).",
+    "animations": "framer-motion for entrances and the tracing beam effect.",
+    "toasts": "sonner (used for the discreet live activity notifications in the bottom corner)."
+  },
+  "image_urls": {
+    "hero": {
+      "url": "https://images.pexels.com/photos/27428049/pexels-photo-27428049.jpeg",
+      "description": "Elegant silhouette of a woman with wine, setting a mysterious and luxurious tone."
+    },
+    "preview_carousel": [
+      "https://images.unsplash.com/photo-1679993813768-ca5ee0495991",
+      "https://images.unsplash.com/photo-1625856198153-4723522a1c9b",
+      "https://images.pexels.com/photos/13026741/pexels-photo-13026741.jpeg",
+      "https://images.pexels.com/photos/17770843/pexels-photo-17770843.jpeg",
+      "https://images.unsplash.com/photo-1767972463602-f5b562b8dbe8"
+    ],
+    "textures_backgrounds": [
+      "https://images.unsplash.com/photo-1671159593298-0025d7288d0c"
+    ],
+    "avatars": [
+      "https://images.unsplash.com/photo-1660619388291-ac5592bbdd57",
+      "https://images.unsplash.com/photo-1627135542027-e46d6624cd29",
+      "https://images.pexels.com/photos/11308988/pexels-photo-11308988.jpeg",
+      "https://images.unsplash.com/photo-1670601898837-98aa3efb9663",
+      "https://images.pexels.com/photos/8669634/pexels-photo-8669634.jpeg"
+    ],
+    "chat_mockups": [
+      "https://images.pexels.com/photos/27413499/pexels-photo-27413499.jpeg",
+      "https://images.unsplash.com/photo-1722834228772-01d16b9bf83b"
+    ]
+  },
+  "universal_guidelines_for_main_agent": [
+    "DO NOT use generic centered layouts. Create depth through layered design elements with z-index hierarchy.",
+    "DO NOT apply universal transitions like `transition: all`. Use specific transitions.",
+    "Add `data-testid` to all interactive and key informational elements.",
+    "NEVER use placeholder URLs (like via.placeholder.com). Use the provided image URLs.",
+    "DO NOT use pure transparent backgrounds on headers or overlays; use bg-black/60 with backdrop-blur.",
+    "Build the dashboard using a standard sidebar layout with dark theme variations of Shadcn components.",
+    "Add subtle grain textures and noise overlays to background elements.",
+    "Use Lucide icons for UI elements.",
+    "Prioritize HTML semantics and accessibility (WCAG AA).",
+    "Share guidelines for .js files, not .tsx files."
+  ],
+  "accessibility": {
+    "contrast": "Ensure all text against dark backgrounds passes APCA/WCAG standards.",
+    "focus": "Use focus:ring-2 focus:ring-rosa_queimado on inputs and buttons.",
+    "motion": "Respect prefers-reduced-motion."
+  }
+}
