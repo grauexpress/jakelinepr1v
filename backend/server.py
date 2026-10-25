@@ -504,7 +504,7 @@ app.mount("/api/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads"
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://192.168.1.160:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
