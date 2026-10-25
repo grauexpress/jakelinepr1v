@@ -178,7 +178,7 @@ export const ListEditor = ({ label, items, onChange, testid }) => (
 );
 
 export const SaveBar = ({ onSave, saving }) => (
-  <div className="sticky bottom-4 z-10 mt-8 flex justify-end">
+  <div className="sticky bottom-20 sm:bottom-4 z-10 mt-8 flex justify-end">
     <button
       onClick={onSave}
       disabled={saving}
@@ -197,3 +197,4 @@ export const TabTitle = ({ title, subtitle }) => (
     {subtitle && <p className="mt-1 text-sm text-white/40">{subtitle}</p>}
   </div>
 );
+
