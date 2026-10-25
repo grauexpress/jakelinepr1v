@@ -4,29 +4,37 @@ import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Area, ImageField, SwitchRow, Text } from "./Fields";
 
-export function Crud({ resource, title, subtitle, fields, makeNew, itemLabel, testid }) {
+export function Crud({
+  resource,
+  title,
+  subtitle,
+  fields,
+  makeNew,
+  itemLabel,
+  testid,
+}) {
   const [items, setItems] = useState(null);
   const [openId, setOpenId] = useState(null);
   const [savingId, setSavingId] = useState(null);
 
-  const load = () =>
+  useEffect(() => {
     api
       .get(`/admin/${resource}`)
       .then((r) => setItems(r.data))
       .catch(() => toast.error("Erro ao carregar"));
-
-  useEffect(() => {
-    load();
   }, [resource]);
 
   const patch = (id, key, value) =>
-    setItems((arr) => arr.map((it) => (it.id === id ? { ...it, [key]: value } : it)));
+    setItems((arr) =>
+      arr.map((it) => (it.id === id ? { ...it, [key]: value } : it))
+    );
 
   const save = async (item) => {
     setSavingId(item.id);
+
     try {
       await api.put(`/admin/${resource}/${item.id}`, item);
-      toast.success("Item salvo");
+      toast.success("Salvo com sucesso");
     } catch {
       toast.error("Erro ao salvar");
     } finally {
@@ -34,127 +42,184 @@ export function Crud({ resource, title, subtitle, fields, makeNew, itemLabel, te
     }
   };
 
-  const add = async () => {
+  const create = async () => {
     try {
-      const r = await api.post(`/admin/${resource}`, makeNew());
-      setItems((arr) => [...arr, r.data]);
-      setOpenId(r.data.id);
-      toast.success("Item criado");
+      const item = makeNew();
+      const response = await api.post(`/admin/${resource}`, item);
+
+      setItems((arr) => [...arr, response.data]);
+      setOpenId(response.data.id);
+
+      toast.success("Criado com sucesso");
     } catch {
       toast.error("Erro ao criar");
     }
   };
 
-  const remove = async (id) => {
-    if (!window.confirm("Remover este item?")) return;
+  const remove = async (item) => {
+    if (!window.confirm(`Excluir ${itemLabel(item)}?`)) return;
+
     try {
-      await api.delete(`/admin/${resource}/${id}`);
-      setItems((arr) => arr.filter((it) => it.id !== id));
-      toast.success("Removido");
+      await api.delete(`/admin/${resource}/${item.id}`);
+
+      setItems((arr) => arr.filter((it) => it.id !== item.id));
+
+      if (openId === item.id) {
+        setOpenId(null);
+      }
+
+      toast.success("Excluído com sucesso");
     } catch {
-      toast.error("Erro ao remover");
+      toast.error("Erro ao excluir");
     }
   };
 
-  const move = async (index, dir) => {
-    const arr = [...items];
-    const j = index + dir;
-    if (j < 0 || j >= arr.length) return;
-    [arr[index], arr[j]] = [arr[j], arr[index]];
-    const reordered = arr.map((it, k) => ({ ...it, order: k }));
-    setItems(reordered);
-    try {
-      await Promise.all([
-        api.put(`/admin/${resource}/${reordered[index].id}`, reordered[index]),
-        api.put(`/admin/${resource}/${reordered[j].id}`, reordered[j]),
-      ]);
-    } catch {
-      toast.error("Erro ao reordenar");
-    }
-  };
-
-  if (!items)
+  if (items === null) {
     return (
-      <div className="flex justify-center py-16">
-        <Loader2 className="animate-spin text-white/40" />
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="animate-spin" size={24} />
       </div>
     );
+  }
 
   return (
-    <div data-testid={testid}>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div data-testid={testid} className="space-y-6">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="font-serif-display text-2xl text-white">{title}</h2>
-          {subtitle && <p className="mt-1 text-sm text-white/40">{subtitle}</p>}
+          <h2 className="text-xl font-semibold">{title}</h2>
+
+          {subtitle && (
+            <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+          )}
         </div>
+
         <button
-          onClick={add}
-          className="inline-flex items-center gap-2 rounded-full border border-[#FF2A70]/50 bg-[#FF2A70]/10 px-4 py-2 text-xs font-semibold text-[#FF2A70] transition-colors hover:bg-[#FF2A70]/20"
-          data-testid={`${testid}-add`}
+          type="button"
+          onClick={create}
+          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
         >
-          <Plus size={14} /> Adicionar
+          <Plus size={16} />
+          Adicionar
         </button>
       </div>
 
       <div className="space-y-3">
-        {items.map((item, i) => (
-          <div key={item.id} className="rounded-2xl border border-white/10 bg-white/[0.03]" data-testid={`${testid}-item-${i}`}>
-            <div className="flex items-center gap-1.5 px-4 py-3">
-              <button
-                onClick={() => setOpenId(openId === item.id ? null : item.id)}
-                className="flex flex-1 items-center gap-2 text-left text-sm text-white/85"
-                data-testid={`${testid}-toggle-${i}`}
-              >
-                {openId === item.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                <span className="truncate">{itemLabel(item)}</span>
-              </button>
-              {!item.active && (
-                <span className="rounded-full border border-white/10 px-2 py-0.5 text-[9px] font-mono-accent uppercase tracking-widest text-white/30">
-                  inativo
-                </span>
-              )}
-              <button onClick={() => move(i, -1)} className="p-1.5 text-white/40 transition-colors hover:text-white" aria-label="Mover para cima" data-testid={`${testid}-up-${i}`}>
-                <ChevronUp size={14} />
-              </button>
-              <button onClick={() => move(i, 1)} className="p-1.5 text-white/40 transition-colors hover:text-white" aria-label="Mover para baixo" data-testid={`${testid}-down-${i}`}>
-                <ChevronDown size={14} />
-              </button>
-              <button onClick={() => remove(item.id)} className="p-1.5 text-white/40 transition-colors hover:text-red-400" aria-label="Remover" data-testid={`${testid}-delete-${i}`}>
-                <Trash2 size={14} />
-              </button>
-            </div>
+        {items.map((item) => {
+          const isOpen = openId === item.id;
 
-            {openId === item.id && (
-              <div className="grid gap-4 border-t border-white/10 p-4 sm:grid-cols-2">
-                {fields.map((f) => {
-                  const val = item[f.key] ?? "";
-                  if (f.type === "textarea")
-                    return <Area key={f.key} label={f.label} value={val} onChange={(v) => patch(item.id, f.key, v)} testid={`${testid}-${f.key}-${i}`} />;
-                  if (f.type === "image")
-                    return <ImageField key={f.key} label={f.label} value={val} onChange={(v) => patch(item.id, f.key, v)} testid={`${testid}-${f.key}-${i}`} />;
-                  if (f.type === "switch")
-                    return <SwitchRow key={f.key} label={f.label} checked={!!item[f.key]} onChange={(v) => patch(item.id, f.key, v)} testid={`${testid}-${f.key}-${i}`} />;
-                  return <Text key={f.key} label={f.label} value={val} onChange={(v) => patch(item.id, f.key, v)} testid={`${testid}-${f.key}-${i}`} />;
-                })}
-                <div className="flex justify-end sm:col-span-2">
-                  <button
-                    onClick={() => save(item)}
-                    disabled={savingId === item.id}
-                    className="rounded-full bg-[#FF2A70] px-5 py-2 text-xs font-semibold text-white transition-opacity disabled:opacity-50"
-                    data-testid={`${testid}-save-${i}`}
-                  >
-                    {savingId === item.id ? "Salvando..." : "Salvar item"}
-                  </button>
+          return (
+            <div
+              key={item.id}
+              className="overflow-hidden rounded-xl border bg-background"
+            >
+              <button
+                type="button"
+                onClick={() => setOpenId(isOpen ? null : item.id)}
+                className="flex w-full items-center justify-between gap-4 p-4 text-left"
+              >
+                <div className="min-w-0">
+                  <div className="truncate font-medium">
+                    {itemLabel(item)}
+                  </div>
+
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    ID: {item.id}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-        {items.length === 0 && (
-          <p className="rounded-2xl border border-dashed border-white/10 py-10 text-center text-sm text-white/35">
-            Nenhum item ainda. Clique em Adicionar.
-          </p>
-        )}
+
+                {isOpen ? (
+                  <ChevronUp size={18} />
+                ) : (
+                  <ChevronDown size={18} />
+                )}
+              </button>
+
+              {isOpen && (
+                <div className="space-y-5 border-t p-4">
+                  {fields.map((field) => {
+                    const value = item[field.key];
+
+                    if (field.type === "switch") {
+                      return (
+                        <SwitchRow
+                          key={field.key}
+                          label={field.label}
+                          checked={Boolean(value)}
+                          onChange={(checked) =>
+                            patch(item.id, field.key, checked)
+                          }
+                        />
+                      );
+                    }
+
+                    if (field.type === "image") {
+                      return (
+                        <ImageField
+                          key={field.key}
+                          label={field.label}
+                          value={value || ""}
+                          onChange={(next) =>
+                            patch(item.id, field.key, next)
+                          }
+                        />
+                      );
+                    }
+
+                    if (field.type === "area") {
+                      return (
+                        <Area
+                          key={field.key}
+                          label={field.label}
+                          value={value || ""}
+                          onChange={(next) =>
+                            patch(item.id, field.key, next)
+                          }
+                        />
+                      );
+                    }
+
+                    return (
+                      <Text
+                        key={field.key}
+                        label={field.label}
+                        value={value ?? ""}
+                        type={field.type || "text"}
+                        placeholder={field.placeholder}
+                        onChange={(next) =>
+                          patch(item.id, field.key, next)
+                        }
+                      />
+                    );
+                  })}
+
+                  <div className="flex justify-between gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => remove(item)}
+                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
+                    >
+                      <Trash2 size={16} />
+                      Excluir
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => save(item)}
+                      disabled={savingId === item.id}
+                      className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
+                    >
+                      {savingId === item.id && (
+                        <Loader2 size={16} className="animate-spin" />
+                      )}
+
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
