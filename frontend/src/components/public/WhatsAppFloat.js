@@ -1,4 +1,3 @@
-```jsx
 import { MessageCircle } from "lucide-react";
 import { useSite } from "@/context/SiteContext";
 import { track, waLink } from "@/lib/api";
@@ -19,7 +18,7 @@ export default function WhatsAppFloat() {
   return (
     <button
       onClick={open}
-      className={`fixed bottom-20 sm:bottom-5 ${side} z-50 pulse-ring group flex items-center gap-0 sm:gap-2.5 rounded-full bg-[var(--c-wa)] p-4 sm:pl-4 sm:pr-5 text-white shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1`}
+      className={`fixed ${side} bottom-20 sm:bottom-5 z-50 pulse-ring group flex items-center gap-0 sm:gap-2.5 rounded-full bg-[var(--c-wa)] p-4 sm:pl-4 sm:pr-5 text-white shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1`}
       data-testid="whatsapp-float"
       aria-label={wa.floatingText}
     >
@@ -28,4 +27,3 @@ export default function WhatsAppFloat() {
     </button>
   );
 }
-```
