@@ -616,7 +616,7 @@ async def login(
         access,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=43200,
         path="/",
     )
@@ -626,7 +626,7 @@ async def login(
         refresh,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=604800,
         path="/",
     )
