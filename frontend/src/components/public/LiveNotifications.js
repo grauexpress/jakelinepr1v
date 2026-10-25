@@ -1,5 +1,3 @@
-```jsx
-import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -182,5 +180,3 @@ export default function LiveNotifications() {
     </div>
   );
 }
-```
-
