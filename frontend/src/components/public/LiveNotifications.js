@@ -103,10 +103,7 @@ export default function LiveNotifications() {
       return {
         kind,
         text: t[kind] || "Atividade na página",
-        time:
-          ev.minutes_ago <= 0
-            ? "agora mesmo"
-            : `há ${ev.minutes_ago} min`,
+        time: ev.minutes_ago <= 0 ? "agora mesmo" : "h� " + ev.minutes_ago + " min",
       };
     };
 
@@ -156,7 +153,7 @@ export default function LiveNotifications() {
 
   return (
     <div
-      className={`fixed ${side} top-20 sm:top-6 z-50 pointer-events-none`}
+      className={"fixed " + side + " top-20 sm:top-6 z-50 pointer-events-none"}
     >
       <AnimatePresence>
         <motion.div
@@ -186,3 +183,4 @@ export default function LiveNotifications() {
   );
 }
 ```
+
