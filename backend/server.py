@@ -3,6 +3,8 @@ load_dotenv()
 
 import os
 import uuid
+import cloudinary
+import cloudinary.uploader
 import logging
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
@@ -20,6 +22,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 ROOT_DIR = Path(__file__).parent
 UPLOAD_DIR = ROOT_DIR / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
+
+cloudinary.config(
+    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"],
+    secure=True,
+)
 
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
@@ -776,14 +785,10 @@ async def upload_image(
             detail="Arquivo muito grande (máx 8MB)"
         )
 
-    name = f"{uuid.uuid4().hex}{ext}"
-
-    (
-        UPLOAD_DIR / name
-    ).write_bytes(content)
+    upload_result = cloudinary.uploader.upload(content, folder="jakelinepr1v", resource_type="image")
 
     return {
-        "url": f"/api/uploads/{name}"
+        "url": upload_result["secure_url"]
     }
 
 
@@ -1280,3 +1285,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+
+
