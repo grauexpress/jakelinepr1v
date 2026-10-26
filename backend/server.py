@@ -758,7 +758,11 @@ ALLOWED_EXT = {
     ".png",
     ".webp",
     ".gif",
-    ".svg"
+    ".svg",
+    ".mp4",
+    ".mov",
+    ".webm",
+    ".mkv"
 }
 
 
@@ -779,13 +783,13 @@ async def upload_image(
 
     content = await file.read()
 
-    if len(content) > 8 * 1024 * 1024:
+    if len(content) > 100 * 1024 * 1024:
         raise HTTPException(
             status_code=400,
-            detail="Arquivo muito grande (máx 8MB)"
+            detail="Arquivo muito grande (máx 100MB)"
         )
 
-    upload_result = cloudinary.uploader.upload(content, folder="jakelinepr1v", resource_type="image")
+    upload_result = cloudinary.uploader.upload(content, folder="jakelinepr1v", resource_type="auto")
 
     return {
         "url": upload_result["secure_url"]
@@ -1285,6 +1289,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+
+
+
 
 
 
