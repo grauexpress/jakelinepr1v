@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { useSite } from "@/context/SiteContext";
 
@@ -46,7 +47,9 @@ export default function Atendimento() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#111] p-6 text-white">
         <p>O atendimento está temporariamente indisponível.</p>
-        <Link to="/" className="underline">Voltar ao site</Link>
+        <Link to="/" className="underline">
+          Voltar ao site
+        </Link>
       </main>
     );
   }
@@ -59,7 +62,6 @@ export default function Atendimento() {
     );
   }
 
-  // Typebot ocupa toda a janela: sem cabeçalho, cartão, boas-vindas ou rodapé.
   return (
     <main className="fixed inset-0 h-[100dvh] w-full overflow-hidden bg-[#111]">
       <iframe
