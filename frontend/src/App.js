@@ -1,8 +1,10 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { SiteProvider } from "@/context/SiteContext";
 import Landing from "@/pages/Landing";
+import Atendimento from "@/pages/Atendimento";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminPanel from "@/pages/admin/AdminPanel";
 
@@ -27,13 +29,29 @@ function LandingPage() {
   );
 }
 
+function AtendimentoPage() {
+  return (
+    <SiteProvider>
+      <Atendimento />
+    </SiteProvider>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Página principal original */}
           <Route path="/" element={<LandingPage />} />
+
+          {/* Nova página de atendimento */}
+          <Route path="/atendimento" element={<AtendimentoPage />} />
+
+          {/* Login do ADM original */}
           <Route path="/admin/login" element={<AdminLogin />} />
+
+          {/* Painel ADM original */}
           <Route
             path="/admin"
             element={
@@ -42,9 +60,12 @@ function App() {
               </RequireAuth>
             }
           />
+
+          {/* Rotas desconhecidas */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+
       <Toaster theme="dark" position="top-center" richColors />
     </AuthProvider>
   );
